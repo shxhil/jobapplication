@@ -7,7 +7,8 @@ urlpatterns = [
            path("profiles/add",views.ProfileCreateView.as_view(),name="profile_add"),
            path("profiles/<int:pk>/",views.ProfileDetailView.as_view(),name="profile_detail"),
            path("profile/<int:pk>/change",views.ProfileEditView.as_view(),name="profile_edit"),
-           path("jobs/<int:pk>",views.JobDetailView.as_view(),name="job-detail")
+           path("jobs/<int:pk>",views.JobDetailView.as_view(),name="job-detail"),
+           path("jobs/<int:pk>/apply",views.ApplyJobView.as_view(),name="job_apply")
 
 
 ]
