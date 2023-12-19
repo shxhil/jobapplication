@@ -1,0 +1,33 @@
+{%extends 'jobseeker/base.html'%}
+
+{%block bodyblock%}
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card" style="width: 50%;">
+       {%if data.profile_pic%}
+       <img src="{{data.profile_pic.url}}" class="card-img-top" alt="no image" style="max-height: 400px; ">
+       
+       {%endif%}
+        <div class="card-body">
+          <h5 class="card-title fw-bold">{{data.user}}</h5>
+          <p class="card-text">
+            <p class="fw-bold">Skills:{{data.skills}}</p>
+           <p> address:{{data.address}}</p>
+           <p> phone:{{data.phone}}</p>
+           <p> email:{{data.user.email}}</p>
+            </p>
+        </div>
+        <ul class="list-group list-group-flush">
+
+          <li class="list-group-item">Experience:{{data.experience}}</li>
+          <li class="list-group-item">Gender:{{data.gender}}</li>
+          <li class="list-group-item">Qualification:{{data.qualification}}</li>
+        </ul>
+        <div class="card-body">
+          {%if data.resume%}
+          <a href="{{data.resume.url}}" class="btn btn-outline-info">Download cv</a>
+
+          {%endif%}
+        </div>
+      </div>
+</div>
+{%endblock%}
