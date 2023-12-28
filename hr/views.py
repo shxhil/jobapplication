@@ -3,12 +3,15 @@ from django.db.models.query import QuerySet
 from django.forms.models import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
-from django.views.generic import View,FormView,TemplateView,CreateView,ListView,UpdateView
+from django.views.generic import View,FormView,TemplateView,CreateView,ListView,UpdateView,DetailView
 from hr.forms import Loginform,CategoryForm,JobForm,JobChangeForm
 from django.contrib.auth import authenticate,login,logout
-from myapp.models import Category,Jobs
+from myapp.models import Category,Jobs,Applications
 from django.urls import reverse_lazy
 from django.contrib import messages
+
+from django.core.mail import send_mail
+from django.conf import settings
 # Create your views here.
 
 class SigninView(FormView):
@@ -105,3 +108,30 @@ class JobUpdateView(UpdateView):
     template_name="job_edit.html"
     model=Jobs
     success_url=reverse_lazy("job-all")
+
+class JobApplicationlistView(View):
+    def get(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        job_obj=Jobs.objects.get(id=id)
+        qs=Applications.objects.filter(job=job_obj)
+        return render(request,"applications.html",{"data":qs})
+
+class ApplicationDetailView(DetailView):
+    template_name="application_detail.html"
+    context_object_name="application"
+    model=Applications
+    
+class ApplicationUpdateView(View):
+    def post(self,request,*args,**kwargs):
+        id=kwargs.get("pk")
+        value=request.POST.get("status")
+        Applications.objects.filter(id=id).update(status=value)
+        send_mail(
+    "Your application status has been change",
+    "You appplication has been changed 2nd",
+    "kamohamedshahil@gmail.com",
+    ["shahilshx007@gmail.com"],
+    fail_silently=False,
+)
+
+        return redirect("index")

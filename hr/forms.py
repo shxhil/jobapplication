@@ -17,7 +17,9 @@ class JobForm(forms.ModelForm):
         exclude=("status",)#comma is written to take it as  tupple
         widgets={
             "category":forms.Select(attrs={"class":"form-select form-control"}),
-             "last_date":forms.DateInput(attrs={"class":"form-control","type":"date"})
+             "last_date":forms.DateInput(attrs={"class":"form-control","type":"date"}),
+            "job_type":forms.Select(attrs={"class":"form-select form-control"}),
+
         }
         
 class JobChangeForm(forms.ModelForm):

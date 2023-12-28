@@ -1,8 +1,9 @@
 {%extends 'jobseeker/base.html'%}
 
 {%block bodyblock%}
+<h4>{{data|length}} Saved Jobs</h4>
 
-{%for job in jobs%}
+{%for job in data%}
 <div class="card mb-3" style="max-width: 540px;">
     <div class="row g-0">
       <div class="col-md-4 d-flex justify-content-center align-items-center px-2">

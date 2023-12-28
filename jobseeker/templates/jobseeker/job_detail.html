@@ -37,7 +37,7 @@
             <div class="card-body d-flex justify-content-center">
                 <form action="{%url 'job_apply' data.id%}" method="post">
                     {%csrf_token%}
-                    <button type="submit">Apply</button>
+                    <button type="submit" class="btn btn-primary">Apply</button>
                 </form>
             </div>
         </div>

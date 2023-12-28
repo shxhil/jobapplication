@@ -1,0 +1,44 @@
+{%extends 'base.html'%}
+
+{%block mainblock%}
+
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="card" style="width: 50%;">
+       {%if application.student.profile.profile_pic%}
+       <img src="{{application.student.profile.profile_pic.url}}" class="card-img-top" alt="no image" style="max-height: 400px; ">
+       
+       {%endif%}
+        <div class="card-body">
+          <h5 class="card-title fw-bold">{{application.student}}</h5>
+          <p class="card-text">
+            <p class="fw-bold">Skills:{{application.student.profile.skill}}</p>
+           <p> address:{{application.student.profile.address}}</p>
+           <p> phone:{{application.student.profile.phone}}</p>
+           <p> email:{{application.student.email}}</p>
+            </p>
+        </div>
+        <ul class="list-group list-group-flush">
+
+          <li class="list-group-item">Experience:{{application.student.profile.experience}}</li>
+          <li class="list-group-item">Gender:{{application.student.profile.gender}}</li>
+          <li class="list-group-item">Qualification:{{application.student.profile.qualification}}</li>
+        </ul>
+        <div class="card-body">
+          {%if application.student.profile.resume%}
+          <a href="{{application.student.profile.resume.url}}" class="btn btn-outline-info">Download cv</a>
+
+          {%endif%}
+          <form action="{%url 'application_edit' application.id %}" method="post">
+            {%csrf_token%}
+            <label for="">select status</label>
+            <select name="status" id="" class="form-control form-select">
+              <option value="rejected">rejected</option>
+              <option value="processing">processing</option>
+              <option value="shortlisted">shortlisted</option>
+            </select>
+            <button type="submit" class="btn btn-outline-info">save</button>
+          </form>
+        </div>
+      </div>
+</div>
+{%endblock%}
