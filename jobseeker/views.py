@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.shortcuts import render,redirect
 from django.views.generic import View,CreateView,TemplateView,DetailView,UpdateView,ListView
 # Create your views here.
-from myapp.models import StudentProfile,Jobs,Applications
+from myapp.models import StudentProfile,Jobs,Applications,Category
 from django.urls import reverse_lazy
 from jobseeker.forms import RegistrationForm,ProfileForm
 
@@ -19,11 +19,21 @@ class StudentIndexView(ListView):
     template_name="jobseeker/index.html"
     model=Jobs
     context_object_name="jobs"
+    
     def get_queryset(self):
-        # qs=Jobs.objects.all().order_by("-created_date")#- is for descenting order
-        my_applications=Applications.objects.filter(student=self.request.user).values_list("job",flat=True)
-        qs=Jobs.objects.exclude(id__in=my_applications).order_by("-created_date")
-        return qs               #id__in = id l indoon check cheyyan
+        applied_jobs=Applications.objects.filter(student=self.request.user).values_list("job",flat=True)#tuple alland list aayt job na set cheyyen
+        avoided_qs=Jobs.objects.exclude(id__in=applied_jobs).order_by("-created_date")#id__in=indoon check aakan
+        if "category" in self.request.GET:
+            category_value=self.request.GET.get("category")
+            avoided_qs=avoided_qs.filter(category=category_value)
+        return avoided_qs               
+
+    
+    def get_context_data(self, **kwargs):
+        context=super().get_context_data(**kwargs)
+        qs=Category.objects.all()
+        context["categories"]=qs
+        return context
 
 class ProfileCreateView(CreateView):
     template_name="jobseeker/profile_add.html"

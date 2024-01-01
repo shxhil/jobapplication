@@ -122,16 +122,21 @@ class ApplicationDetailView(DetailView):
     model=Applications
     
 class ApplicationUpdateView(View):
-    def post(self,request,*args,**kwargs):
+    def post(self,request,*args, **kwargs):
         id=kwargs.get("pk")
+        applications_object=Applications.objects.get(id=id)
+        applicant_mails=applications_object.student.email
         value=request.POST.get("status")
         Applications.objects.filter(id=id).update(status=value)
-        send_mail(
-    "Your application status has been change",
-    "You appplication has been changed 2nd",
-    "kamohamedshahil@gmail.com",
-    ["shahilshx007@gmail.com"],
-    fail_silently=False,
-)
+       
+
+        if value=="shortlisted":
+                        send_mail(
+                "Your application status has been change",
+                "You application has been changed 2nd",
+                "kamohamedshahil@gmail.com",
+                ["shahilshx007@gmail.com"],
+                fail_silently=False,
+            )
 
         return redirect("index")

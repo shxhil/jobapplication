@@ -29,9 +29,9 @@
 	background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
 	background: linear-gradient(to right, #FF4B2B, #FF416C);">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href=" {% url 'seeker_index' %} ">
                 <img src="{%static 'jobseeker/images/linkspherena.png'%}" alt="Logo" width="100" height="h-auto"
-                    class="ms-5">
+                    class="ms-5"  >
             </a>
 
             <!-- search start -->
@@ -92,7 +92,11 @@
 
     </nav>
     <!-- nav ends -->
-
+    <div class="container mt-3">
+        {%block category_block%}
+        
+        {%endblock%}
+    </div>
     <div class="container d-flex flex-column justify-content-center align-items-center mt-5">
         {%block bodyblock%}
 

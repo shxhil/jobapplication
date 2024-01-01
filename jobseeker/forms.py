@@ -12,4 +12,4 @@ class RegistrationForm(UserCreationForm):
 class ProfileForm(forms.ModelForm):
     class Meta:
         model=StudentProfile
-        exclude=("user",)
+        exclude=("user","saved_jobs")
