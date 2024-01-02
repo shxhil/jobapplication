@@ -4,7 +4,7 @@
 <div class="row mt-5">
     {%for cat in categories%}
         <div class="col-3">
-            <a href="{%url 'seeker_index' %}?category={{cat.id}}">{{cat.name}}</a>({{cat.jobs_set.all.count}} jobs)
+            <a href="{%url 'seeker_index' %}?category={{cat.name}}">{{cat.name}}</a>({{cat.jobs_set.all.count}} jobs)
         </div>
     {%endfor%}
 </div>

@@ -23,9 +23,20 @@
 
 
     <div class="container d-flex justify-content-around">
+        
         <form action="" method="post" class="bg-white m-5 p-5 w-50 rounded-3">
             {%csrf_token%}
             <p class="fw-bold fs-4 "> Login</p>
+
+            {%if messages%}
+                {%for m in messages%}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Error!</strong> {{m}}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {%endfor%}
+             {%endif%}
+        
             <hr class="mb-5 w-25 border-4">
             <div class="text-center">
                 <input type="text" class="form-control  text-center" name="username" placeholder="enter username"><br>

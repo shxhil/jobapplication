@@ -12,6 +12,24 @@ from django.contrib import messages
 
 from django.core.mail import send_mail
 from django.conf import settings
+
+from jobseeker.views import signin_required
+from django.views.decorators.cache import never_cache
+from django.utils.decorators import method_decorator
+
+from django.contrib import messages
+
+def admin_permission_required(fn):
+    def wrapper(request,*args,**kwargs):
+          if not request.user.is_superuser:
+                messages.error(request,"admin permission required")
+                return redirect("signin")
+          else:
+               return fn(request,*args,**kwargs)
+    return wrapper
+
+decs=[admin_permission_required,signin_required,never_cache]     
+    
 # Create your views here.
 
 class SigninView(FormView):
@@ -34,10 +52,11 @@ class SigninView(FormView):
         print("error")
         return render(request,"signin.html",{"form":form})
     
-    
+@method_decorator(decs,name="dispatch")   
 class DashboardView(TemplateView):
     template_name="index.html"  
 
+@method_decorator(decs,name="dispatch")
 class SignoutView(View):
     def get(self,request,*args,**kwargs):
         logout(request)
@@ -58,6 +77,8 @@ class SignoutView(View):
 #        else:
 #            print("error")
 #            return redirect("category")
+    
+@method_decorator(decs,name="dispatch")
 class catogarylistView(CreateView,ListView):
     template_name="category.html"
     form_class=CategoryForm
@@ -68,19 +89,21 @@ class catogarylistView(CreateView,ListView):
         messages.success(self.request,"added")
         return super().form_valid(form)
 
-
+@method_decorator(decs,name="dispatch")
 class CategoryDeleteView(View):
    def get(self,request,*args,**kwargs):
         id=kwargs.get("pk")
         print(id)
         Category.objects.get(id=id).delete()
         return redirect('category')
-   
+
+@method_decorator(decs,name="dispatch")  
 class JobCreatView(CreateView):
     template_name="job_add.html"
     form_class=JobForm
     success_url=reverse_lazy('job-all')
 
+@method_decorator(decs,name="dispatch")
 class JobListView(ListView):
     template_name="job_list.html"
     context_object_name="jobs"
@@ -97,18 +120,22 @@ class JobListView(ListView):
     # def get_queryset(self) :
     #     return Jobs.objects.filter(status=True)#status true allel list n ozhivaakki list cheyyan
                                                 #orm query change
+
+@method_decorator(decs,name="dispatch")
 class JobDeleteView(View):
     def get(self,request,*args,**kwargs):
         id=kwargs.get("pk")
         Jobs.objects.get(id=id).delete()
         return redirect("job-all")
-    
+
+@method_decorator(decs,name="dispatch")    
 class JobUpdateView(UpdateView):
     form_class=JobChangeForm
     template_name="job_edit.html"
     model=Jobs
     success_url=reverse_lazy("job-all")
 
+@method_decorator(decs,name="dispatch")
 class JobApplicationlistView(View):
     def get(self,request,*args,**kwargs):
         id=kwargs.get("pk")
@@ -116,11 +143,13 @@ class JobApplicationlistView(View):
         qs=Applications.objects.filter(job=job_obj)
         return render(request,"applications.html",{"data":qs})
 
+@method_decorator(decs,name="dispatch")
 class ApplicationDetailView(DetailView):
     template_name="application_detail.html"
     context_object_name="application"
     model=Applications
-    
+
+@method_decorator(decs,name="dispatch")   
 class ApplicationUpdateView(View):
     def post(self,request,*args, **kwargs):
         id=kwargs.get("pk")
