@@ -117,8 +117,8 @@ class JobListView(ListView):
 
 
 
-    # def get_queryset(self) :
-    #     return Jobs.objects.filter(status=True)#status true allel list n ozhivaakki list cheyyan
+    def get_queryset(self) :
+        return Jobs.objects.filter(status=True)#status true allel list n ozhivaakki list cheyyan
                                                 #orm query change
 
 @method_decorator(decs,name="dispatch")
